@@ -36,9 +36,11 @@ public class SimpleController {
 
     // Get all Persons
     @GetMapping
-    public ResponseEntity<List<Person>> getAllPersons(@AuthenticationPrincipal User authPrincipal) {
+    public ResponseEntity<PersonListResponse> getAllPersons(@AuthenticationPrincipal User authPrincipal) {
         log.info("User: {}", authPrincipal);
         List<Person> persons = personRepository.findAll();
-        return ResponseEntity.ok(persons);
+        PersonListResponse response = new PersonListResponse();
+        response.setPersonList(persons);
+        return ResponseEntity.ok(response);
     }
 }

@@ -2,18 +2,18 @@ package com.example.demo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/persons")
+@Slf4j
 public class SimpleController {
     private final PersonRepository personRepository;
-
-    private static final Logger log = Logger.getLogger(SimpleController.class.getName());
 
     public SimpleController(PersonRepository personRepository) {
         this.personRepository = personRepository;
@@ -36,7 +36,8 @@ public class SimpleController {
 
     // Get all Persons
     @GetMapping
-    public ResponseEntity<List<Person>> getAllPersons() {
+    public ResponseEntity<List<Person>> getAllPersons(@AuthenticationPrincipal User authPrincipal) {
+        log.info("User: {}", authPrincipal);
         List<Person> persons = personRepository.findAll();
         return ResponseEntity.ok(persons);
     }
